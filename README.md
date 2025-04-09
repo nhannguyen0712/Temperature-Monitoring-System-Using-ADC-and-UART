@@ -21,7 +21,7 @@ This project demonstrates how to build a **temperature monitoring system** using
   - **LM35** connected to **ADC0 (PA0)**
   - **16x2 LCD** in **4-bit mode** connected to **PORTC**
   - **UART** via **PD0 (RX) and PD1 (TX)**
-  - **USB-to-Serial module (CP2102)** for PC interface
+  - **USB-to-Serial module (FT232R)** for PC interface
 
 ## **How It Works**
 1. The **LM35 sensor** outputs an analog voltage proportional to the surrounding temperature.
@@ -44,7 +44,7 @@ This project demonstrates how to build a **temperature monitoring system** using
 1. **Hardware**:
    - Connect the **LM35** sensor to **ADC0 (PA0)**.
    - Interface the **16x2 LCD** in 4-bit mode using **PORTC**.
-   - Connect **CP2102 module** for UART via **PD0/PD1** to the PC.
+   - Connect **FT232R module** for UART via **PD0/PD1** to the PC.
 2. **Software**:
    - Compile and upload the project code to the **ATmega324PA**.
    - Open a terminal tool on PC (e.g., PuTTY) at **9600 baud**.
