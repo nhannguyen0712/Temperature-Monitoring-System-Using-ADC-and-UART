@@ -3,8 +3,11 @@
 ## **Project Overview**
 This project builds a **temperature monitoring system** using an **ATmega324PA** microcontroller, **LM35 analog temperature sensor**, **DS3231 real-time clock**, and a **16x2 LCD display**. The system reads analog temperature data via **ADC**, timestamps it with the RTC, and displays the information on an LCD. If the temperature exceeds a set threshold, it sends a warning through **UART** to a PC terminal.
 
-## **Project Diagram**
-![alt text](diagram.png)
+## **Project Schematic**
+![image](https://github.com/user-attachments/assets/596fe668-dcc1-41ff-bab6-bbaf76ea2cde)
+![image](https://github.com/user-attachments/assets/a39bd47b-c150-4e01-8d2e-cf104df1d9f0)
+
+
 
 ## **Features**
 - **LM35 Temperature Sensor**: Outputs analog voltage (10mV/°C) proportional to ambient temperature.
