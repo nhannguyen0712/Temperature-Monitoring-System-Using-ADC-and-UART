@@ -1,66 +1,66 @@
-# **ATmega324PA Temperature Monitoring System Using ADC and UART**
+# **ATmega324PA Temperature Monitoring System with RTC and UART Alert**
 
 ## **Project Overview**
-This project demonstrates how to build a **temperature monitoring system** using an **ATmega324PA** microcontroller, **LM35 temperature sensor**, **UART communication**, and a **16x2 LCD display**. The system reads the analog temperature data via **ADC**, processes it into a Celsius value, and displays the result both on an **LCD** and a **PC terminal** via **UART**. The architecture ensures real-time updates using **interrupts** and **double buffering** for efficient data handling.
+This project builds a **temperature monitoring system** using an **ATmega324PA** microcontroller, **LM35 analog temperature sensor**, **DS3231 real-time clock**, and a **16x2 LCD display**. The system reads analog temperature data via **ADC**, timestamps it with the RTC, and displays the information on an LCD. If the temperature exceeds a set threshold, it sends a warning through **UART** to a PC terminal.
 
 ## **Project Diagram**
 ![alt text](diagram.png)
 
 ## **Features**
-- **LM35 Analog Temperature Sensor**: Converts temperature into analog voltage (10mV/°C).
-- **ADC (Analog-to-Digital Converter)**: Samples the analog voltage and converts it into digital temperature data.
-- **LCD Display**: Shows the real-time temperature in Celsius.
-- **UART Communication**: Sends temperature data to PC terminal tools (e.g., PuTTY).
-- **Double Buffering**: Prevents data loss during ADC read/processing.
-- **Interrupt-Driven**: ADC and UART operations are triggered using interrupts for responsive data handling.
+- **LM35 Temperature Sensor**: Outputs analog voltage (10mV/°C) proportional to ambient temperature.
+- **DS3231 RTC Module**: Provides accurate real-time clock over I2C.
+- **LCD Display**: Shows current temperature, time, and date.
+- **Temperature Alert System**: Sends a **UART alert** if the temperature exceeds a defined threshold.
+- **UART Logging**: Communicates alert events via FT232R USB-to-Serial module.
 
 ## **Technology**
 - **Microcontroller**: **ATmega324PA**
 - **Programming Language**: **C**
 - **Components**:
   - **LM35** connected to **ADC0 (PA0)**
-  - **16x2 LCD** in **4-bit mode** connected to **PORTC**
+  - **DS3231 RTC** connected via **I2C (TWI on PD0/PD1)**
+  - **16x2 LCD** in 4-bit mode (connected to **PORTB/PORTD**)
   - **UART** via **PD0 (RX) and PD1 (TX)**
-  - **USB-to-Serial module (FT232R)** for PC interface
+  - **USB-to-Serial module (FT232R)** for PC communication
 
 ## **How It Works**
-1. The **LM35 sensor** outputs an analog voltage proportional to the surrounding temperature.
-2. The **ADC** periodically samples the analog signal and converts it into a digital value.
-3. Using a conversion formula, the digital value is processed to obtain the temperature in Celsius.
-4. The result is:
-   - Displayed on a **16x2 LCD**
-   - Transmitted via **UART** to a connected PC terminal
-5. The system uses **double buffering** to store ADC values and prevent race conditions.
-6. **Interrupts** are used for both ADC and UART to ensure real-time responsiveness.
+1. The **LM35** outputs an analog voltage based on temperature.
+2. The **ADC** digitizes this voltage to compute temperature in Celsius.
+3. The **DS3231 RTC** provides current date and time via I2C.
+4. Every second:
+   - The **LCD** displays the temperature, date, and time.
+   - If temperature exceeds a preset threshold (e.g. 35°C), a **UART warning** is sent to the PC.
+5. The alert is only triggered once per over-threshold event to avoid spamming.
 
 ## **Files in the Project**
-- **main.c**: Main application logic including initialization, temperature calculation, and display logic.
-- **adc.c / adc.h**: Handles ADC configuration, ISR, and buffering.
-- **lcd.c / lcd.h**: LCD control and display routines.
-- **uart.c / uart.h**: UART communication setup and send functions.
-- **timer.c / timer.h** *(optional)*: Timer setup for periodic ADC trigger.
+- **main.c**: Complete implementation of the monitoring system including:
+  - LCD driver functions
+  - I2C-based RTC read
+  - ADC-based temperature read
+  - UART alert messaging
 
 ## **Setup & Usage**
-1. **Hardware**:
-   - Connect the **LM35** sensor to **ADC0 (PA0)**.
-   - Interface the **16x2 LCD** in 4-bit mode using **PORTC**.
-   - Connect **FT232R module** for UART via **PD0/PD1** to the PC.
+1. **Hardware Connections**:
+   - **LM35** → **ADC0 (PA0)**
+   - **RTC Module (DS3231)** → **SCL/SDA (PD0/PD1)**
+   - **16x2 LCD** → **LCD_RS/LCD_EN (PB0/PB1), LCD_D4–D7 (PD4–PD7)**
+   - **FT232R USB-to-Serial** → **PD0 (RX), PD1 (TX)**
 2. **Software**:
-   - Compile and upload the project code to the **ATmega324PA**.
-   - Open a terminal tool on PC (e.g., PuTTY) at **9600 baud**.
-   - Observe real-time temperature updates on both the **LCD** and terminal.
+   - Compile and upload the `main.c` to the **ATmega324PA** using **AVR-GCC** or **Atmel Studio**.
+   - Open a serial monitor (e.g., PuTTY) at **9600 baud**.
+   - Monitor live temperature updates and UART alerts on high temperature events.
 
 ## **How to Run the Code**
-1. Wire up the components on a breadboard or simulate using **Proteus**.
-2. Upload the compiled hex file to the **ATmega324PA**.
-3. Open the terminal tool and power the system.
-4. Temperature will start displaying and updating every second.
+1. Assemble the hardware on a breadboard or simulate using **Proteus**.
+2. Flash the compiled firmware to the **ATmega324PA**.
+3. Power the system and open a terminal window.
+4. Watch temperature, date, and time on the LCD and get alerts in the terminal if temperature exceeds the threshold.
 
-## **Responsibilities**  
-- Designed and implemented a complete **temperature monitoring system** using **ADC, UART, and LCD** on **ATmega324PA**.  
-- Developed **interrupt-driven routines** for ADC sampling and UART transmission.  
-- Used **double buffering** to ensure consistent data flow without delays.  
-- Tested and validated the system using **Proteus simulation** and live debugging via terminal.
+## **Responsibilities**
+- Developed and tested a complete embedded solution for real-time temperature monitoring.
+- Integrated **ADC, I2C, UART**, and **LCD** in a cohesive system.
+- Built a minimal but robust **UART alert mechanism** for thermal events.
+- Verified performance on **hardware and simulation** using **Proteus** and **serial monitor tools**.
 
 ## **Conclusion**
-This project demonstrates a real-world embedded system integrating **sensors**, **digital communication**, and **user interface**. It reflects robust embedded software practices like **interrupt-driven design**, **buffer management**, and **real-time data processing**, all built on a compact and efficient **ATmega324PA** platform.
+This project showcases the integration of sensor acquisition, digital communication, and user display in embedded systems. By combining an **RTC**, **temperature sensor**, and **alert system**, it provides a scalable base for data logging, environmental control, or safety applications using **ATmega324PA**.
